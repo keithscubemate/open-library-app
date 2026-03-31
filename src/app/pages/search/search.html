@@ -1,0 +1,20 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div>
+  <label>
+    Search:
+    <input formControlName="control" />
+  </label>
+  </div>
+  <div>
+  <label>
+    <input value="book" type="radio" formControlName="boa" />
+    Book
+  </label>
+  <label>
+    <input value="author" type="radio" formControlName="boa" />
+    Author
+  </label>
+  </div>
+
+  <button type="submit" [disabled]="form.invalid">Search</button>
+</form>
