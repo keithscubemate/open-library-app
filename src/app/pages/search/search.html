@@ -1,20 +1,39 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
   <div>
-  <label>
-    Search:
-    <input formControlName="control" />
-  </label>
+    <label>
+      Search:
+      <input formControlName="control" />
+    </label>
   </div>
   <div>
-  <label>
-    <input value="book" type="radio" formControlName="boa" />
-    Book
-  </label>
-  <label>
-    <input value="author" type="radio" formControlName="boa" />
-    Author
-  </label>
+    <label>
+      <input value="book" type="radio" formControlName="boa" />
+      Book
+    </label>
+    <label>
+      <input value="author" type="radio" formControlName="boa" />
+      Author
+    </label>
   </div>
 
   <button type="submit" [disabled]="form.invalid">Search</button>
+
 </form>
+
+<div>
+  @if (books(); as b) {
+  <label>start: {{ b.start }}</label>
+  <label>count: {{ b.num_found }}</label>
+
+  <ul>
+    @for (book of b.docs; track book.key) {
+    <li>
+      <label>{{ book.title }} |</label>
+      <label>| {{ book.author_name }}</label>
+    </li>
+    }
+  </ul>
+  } @else {
+  <p> sry :( </p>
+  }
+</div>
