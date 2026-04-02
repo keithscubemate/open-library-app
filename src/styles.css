@@ -1,1 +1,92 @@
-/* You can add global styles to this file, and also import other style files */
+/* ─── Theme ─────────────────────────────────────────────────────────────────── */
+
+:root {
+  --color-bg:          #f5f0e8;
+  --color-surface:     #fffdf7;
+  --color-border:      #d6c9b0;
+  --color-text:        #2e2a22;
+  --color-text-muted:  #7a6f5e;
+  --color-accent:      #8b5e3c;
+  --color-accent-hover:#6b4528;
+  --color-error:       #9b2335;
+
+  --font-sans: 'Georgia', serif;
+  --font-mono: 'Courier New', monospace;
+
+  --radius:   6px;
+  --shadow:   0 2px 8px rgba(0, 0, 0, 0.08);
+  --max-width: 960px;
+}
+
+/* ─── Reset & Base ───────────────────────────────────────────────────────────── */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-accent-hover);
+  text-decoration: underline;
+}
+
+button {
+  cursor: pointer;
+  font-family: var(--font-sans);
+  background: var(--color-accent);
+  color: var(--color-surface);
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.4rem 1rem;
+  font-size: 0.9rem;
+  transition: background 0.15s;
+}
+
+button:hover:not(:disabled) {
+  background: var(--color-accent-hover);
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+input[type="text"],
+input:not([type]) {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 0.4rem 0.75rem;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+input:focus {
+  border-color: var(--color-accent);
+}
+
+/* ─── Layout Shell ───────────────────────────────────────────────────────────── */
+
+app-root {
+  display: block;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}

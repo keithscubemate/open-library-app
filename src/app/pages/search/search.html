@@ -1,42 +1,29 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <label>
-      Search:
-      <input formControlName="control" />
-    </label>
+<form class="search-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+  <label>Search:</label>
+  <input formControlName="control" type="text" placeholder="Title, author, ISBN…" />
   <button type="submit" [disabled]="form.invalid">Search</button>
 </form>
 
-<div>
-  @if (loading()) {
-  <p>Loading...</p>
-  } @else if (error()) {
-  <pre>Error: {{ jerror() }}</pre>
-  } @else if (books(); as b) {
-  <label>start: {{ b.start }}</label>
-  <label>count: {{ b.num_found }}</label>
-
-  <ul>
+@if (loading()) {
+  <p class="status-message">Loading…</p>
+} @else if (error()) {
+  <pre class="error-message">{{ jerror() }}</pre>
+} @else if (books(); as b) {
+  <p class="search-meta">{{ b.num_found }} results</p>
+  <ul class="results-grid">
     @for (book of b.docs; track book.key) {
-    <li>
-      <app-book-card [book]="book"></app-book-card>
-    </li>
+      <li>
+        <app-book-card [book]="book"></app-book-card>
+      </li>
     }
   </ul>
-  } @else {
-  <p> No search yet :( </p>
-  }
-</div>
 
-<div>
-  <button (click)="updatePage(-1)" [disabled]="loading()">
-    [-]
-  </button>
-  <span>
-    {{ page() }}
-  </span>
-  <button (click)="updatePage(1)" [disabled]="loading()">
-    [+]
-  </button>
-</div>
+  <div class="pagination">
+    <button (click)="updatePage(-1)" [disabled]="loading()">← Prev</button>
+    <span>Page {{ page() }}</span>
+    <button (click)="updatePage(1)" [disabled]="loading()">Next →</button>
+  </div>
+} @else {
+  <p class="status-message">Search for a book above.</p>
+}
 
-<p>[{{search()}}:{{page()}}]</p>
