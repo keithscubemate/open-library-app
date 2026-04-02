@@ -1,14 +1,12 @@
 <a class="card" [routerLink]="['books', book().cover_edition_key]">
   @if (book().cover_i) {
-    <img class="card-cover"
-         [src]="'https://covers.openlibrary.org/b/id/' + book().cover_i + '-M.jpg'"
-         [alt]="book().title" />
+  <img class="card-cover" [src]="'https://covers.openlibrary.org/b/id/' + book().cover_i + '-M.jpg'"
+    [alt]="book().title" />
   } @else {
-    <div class="card-cover-placeholder">📖</div>
+  <div class="card-cover-placeholder">📖</div>
   }
   <div class="card-body">
     <span class="card-title">{{ book().title }}</span>
-    <span class="card-author">{{ book().author_name?.[0] }}</span>
+    <span class="card-author">{{ book().author_name[0] }}</span>
   </div>
 </a>
-

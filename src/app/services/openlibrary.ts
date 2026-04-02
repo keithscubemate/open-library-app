@@ -25,7 +25,7 @@ export class OpenLibrary {
         params: {
           q: query,
           page: page,
-          limit: 10,
+          limit: 12,
         },
       }
     ).pipe(

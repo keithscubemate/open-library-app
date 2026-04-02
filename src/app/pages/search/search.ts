@@ -66,7 +66,7 @@ export class Search {
   updatePage(amount: number) {
     const page = Number(this.page())
 
-    const new_page = (page > 1) ? page + amount : 1
+    const new_page = (page >= 1) ? page + amount : 1
 
     this.router.navigate(
       ['/'],

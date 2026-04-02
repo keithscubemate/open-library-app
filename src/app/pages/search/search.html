@@ -5,25 +5,24 @@
 </form>
 
 @if (loading()) {
-  <p class="status-message">Loading…</p>
+<p class="status-message">Loading…</p>
 } @else if (error()) {
-  <pre class="error-message">{{ jerror() }}</pre>
+<pre class="error-message">{{ jerror() }}</pre>
 } @else if (books(); as b) {
-  <p class="search-meta">{{ b.num_found }} results</p>
-  <ul class="results-grid">
-    @for (book of b.docs; track book.key) {
-      <li>
-        <app-book-card [book]="book"></app-book-card>
-      </li>
-    }
-  </ul>
+<p class="search-meta">{{ b.num_found }} results</p>
+<ul class="results-grid">
+  @for (book of b.docs; track book.key) {
+  <li>
+    <app-book-card [book]="book"></app-book-card>
+  </li>
+  }
+</ul>
 
-  <div class="pagination">
-    <button (click)="updatePage(-1)" [disabled]="loading()">← Prev</button>
-    <span>Page {{ page() }}</span>
-    <button (click)="updatePage(1)" [disabled]="loading()">Next →</button>
-  </div>
+<div class="pagination">
+  <button (click)="updatePage(-1)" [disabled]="loading()">← Prev</button>
+  <span>Page {{ page() }}</span>
+  <button (click)="updatePage(1)" [disabled]="loading()">Next →</button>
+</div>
 } @else {
-  <p class="status-message">Search for a book above.</p>
+<p class="status-message">Search for a book above.</p>
 }
-
