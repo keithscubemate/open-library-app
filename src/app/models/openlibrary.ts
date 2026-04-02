@@ -103,4 +103,6 @@ export interface Author {
   }
 }
 
-
+export interface WorksResponse {
+  entries: Book[],
+}

@@ -1,1 +1,33 @@
-<p>authors {{ author_id }} works!</p>
+@if (loading()) {
+<p class="status-message">Loading…</p>
+} @else if (error()) {
+<pre class="error-message">{{ jerror() }}</pre>
+} @else if (author(); as a) {
+<div>
+  <div>
+    <h1>{{ a.name }} </h1>
+  </div>
+
+  <p> {{ a.bio.value }} </p>
+
+
+  <img class="book-cover" [src]="'https://covers.openlibrary.org/a/id/' + a.photos[0] + '-M.jpg'" [alt]="a.name" />
+
+  <h2> Other Works: </h2>
+  @if (works(); as ws) {
+  <div>
+    <ul>
+      @for (w of ws; track w.key) {
+      <li>
+        <app-work-card [book]="w"></app-work-card>
+      </li>
+      }
+    </ul>
+  </div>
+  } @else {
+  <p> No works :( </p>
+  }
+</div>
+} @else {
+<p>Nothing found :/</p>
+}

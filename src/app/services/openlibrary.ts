@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, of, tap } from 'rxjs';
-import { SearchResponse, Book, Author } from '../models/openlibrary';
+import { SearchResponse, Book, Author, WorksResponse } from '../models/openlibrary';
 
 const BASE_URL = "https://openlibrary.org"
 
@@ -35,6 +35,10 @@ export class OpenLibrary {
 
     return this.http.get<Author>(`${BASE_URL}/authors/${id}.json`)
       .pipe(tap(res => this.authorCache.set(id, res)));
+  }
+
+  getAuthorWorks(id: string): Observable<WorksResponse> {
+    return this.http.get<WorksResponse>(`${BASE_URL}/authors/${id}/works.json`)
   }
 }
 

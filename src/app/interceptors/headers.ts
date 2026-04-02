@@ -1,11 +1,8 @@
 import { HttpInterceptorFn } from "@angular/common/http";
+import { retry } from "rxjs";
 
-export const headersInterceptor: HttpInterceptorFn = (req, next) => {
-  const modified = req.clone({
-    setHeaders: {
-      'User-Agent': 'open-library-uster-app (austin.jones@uster.com)',
-    }
-  });
-
-  return next(modified);
-}
+export const retryInterceptor: HttpInterceptorFn = (req, next) => {
+  return next(req).pipe(
+    retry({ count: 2, delay: 3000 })
+  );
+};
