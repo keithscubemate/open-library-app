@@ -20,7 +20,7 @@ export class Authors {
   loading = signal(false);
   error = signal(null);
   author = signal<Author | null>(null);
-  works = signal<Book[]>([])
+  works = signal<Book[] | null>(null)
 
   jerror = computed(() => JSON.stringify(this.error(), null, 2));
 
@@ -45,8 +45,8 @@ export class Authors {
           this.author.set(author)
           this.loading.set(false)
         }),
-        switchMap(() => this.openlibrary.getAuthorWorks(author_id)),
         takeUntilDestroyed(this.destroyRef),
+        switchMap(() => this.openlibrary.getAuthorWorks(author_id)),
         finalize(() => this.loading.set(false)),
       )
       .subscribe({

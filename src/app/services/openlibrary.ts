@@ -13,6 +13,7 @@ export class OpenLibrary {
   private searchCache = new Map<string, SearchResponse>();
   private bookCache = new Map<string, Book>();
   private authorCache = new Map<string, Author>();
+  private authorWorkCache = new Map<string, WorksResponse>();
 
   search(query: string, page: number): Observable<SearchResponse> {
     const key = `${query}:${page}`;
@@ -38,7 +39,10 @@ export class OpenLibrary {
   }
 
   getAuthorWorks(id: string): Observable<WorksResponse> {
+    if (this.authorWorkCache.has(id)) return of(this.authorWorkCache.get(id)!);
+
     return this.http.get<WorksResponse>(`${BASE_URL}/authors/${id}/works.json`)
+      .pipe(tap(res => this.authorWorkCache.set(id, res)));
   }
 }
 
