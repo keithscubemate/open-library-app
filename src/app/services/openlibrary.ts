@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { SearchResponse, Book, Author } from '../models/openlibrary';
 
 const BASE_URL = "https://openlibrary.org"
@@ -10,8 +10,15 @@ const BASE_URL = "https://openlibrary.org"
 })
 export class OpenLibrary {
   private http = inject(HttpClient);
+  private cache = new Map<string, SearchResponse>();
 
   search(query: string, page: number): Observable<SearchResponse> {
+    const key = `${query}:${page}`;
+
+    if (this.cache.has(key)) {
+      return of(this.cache.get(key)!);
+    }
+
     const resp = this.http.get<SearchResponse>(
       `${BASE_URL}/search.json`,
       {
@@ -21,7 +28,11 @@ export class OpenLibrary {
           limit: 10,
         },
       }
+    ).pipe(
+      tap((res) => this.cache.set(key, res))
     )
+
+
     return resp
   }
 
