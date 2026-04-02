@@ -8,11 +8,6 @@ export const routes: Routes = [
     title: "Search"
   },
   {
-    path: 'search/',
-    component: Search,
-    title: "Search"
-  },
-  {
     path: 'books/:id',
     loadComponent: () => import('./pages/books/books').then(m => m.Books),
     title: "Books"

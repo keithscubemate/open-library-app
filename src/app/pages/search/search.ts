@@ -1,10 +1,10 @@
-import { Component, inject, signal, effect, computed } from '@angular/core';
+import { Component, inject, signal, effect, computed, DestroyRef } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OpenLibrary } from '../../services/openlibrary';
 import { finalize } from 'rxjs';
 import { SearchResponse } from '../../models/openlibrary';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { BookCard } from '../../components/book-card/book-card';
 
 @Component({
@@ -17,11 +17,12 @@ export class Search {
   private router = inject(Router);
   private openlibrary = inject(OpenLibrary);
   private route = inject(ActivatedRoute);
+  private destroyRef = inject(DestroyRef);
 
   params = toSignal(this.route.queryParams)
 
   search = computed(() => this.params()?.['q'])
-  page = computed(() => this.params()?.['page'])
+  page = computed(() => +(this.params()?.['page'] ?? 1))
 
   books = signal<SearchResponse | null>(null)
   loading = signal(false)
@@ -52,7 +53,10 @@ export class Search {
     this.loading.set(true)
 
     this.openlibrary.search(query, page)
-      .pipe(finalize(() => this.loading.set(false)))
+      .pipe(
+        finalize(() => this.loading.set(false)),
+        takeUntilDestroyed(this.destroyRef)
+      )
       .subscribe({
         next: (res) => this.books.set(res),
         error: (err) => this.error.set(err),
