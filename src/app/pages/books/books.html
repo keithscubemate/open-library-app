@@ -1,24 +1,37 @@
 @if (loading()) {
-<p>Loading...</p>
+<p class="status-message">Loading…</p>
 } @else if (error()) {
-<pre>{{jerror()}}</pre>
+<pre class="error-message">{{ jerror() }}</pre>
 } @else if (book(); as b) {
-<div>
-  <img class="card-cover" [src]="'https://covers.openlibrary.org/b/id/' + b.covers[0] + '-M.jpg'" [alt]="b.title" />
-  <p>Title: {{ b.title }}</p>
-  <p>Authors:
-    <a [routerLink]="authorUrl()">
-      {{ author()?.name }}
-    </a>
-  </p>
-  <p>Description: {{ b.description }}</p>
-  <div>
-    Subjects:
-    @for (subject of b.subjects.slice(0, 10); track subject) {
-    {{ subject }},
+<div class="book-detail">
+  <div class="book-info">
+    <h1 class="book-title">{{ b.title }}</h1>
+
+    <p class="book-author">
+      by <a [routerLink]="authorUrl()">{{ author()?.name }}</a>
+    </p>
+
+    @if (descriptions()) {
+    <p class="book-description">{{ descriptions() }}</p>
+    }
+
+    @if (b.subjects.length) {
+    <div class="book-subjects">
+      @for (subject of b.subjects.slice(0, 10); track subject) {
+      <span class="subject-tag">{{ subject }}</span>
+      }
+    </div>
+    }
+  </div>
+
+  <div class="book-cover-col">
+    @if (b.covers[0]) {
+    <img class="book-cover" [src]="'https://covers.openlibrary.org/b/id/' + b.covers[0] + '-M.jpg'" [alt]="b.title" />
+    } @else {
+    <div class="book-cover-placeholder">📖</div>
     }
   </div>
 </div>
 } @else {
-<p> Nothing :/ </p>
+<p class="status-message">Nothing found :/</p>
 }

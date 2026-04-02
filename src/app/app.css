@@ -1,0 +1,4 @@
+.main-header {
+  border-bottom: 1px dashed var(--color-accent);
+  margin-bottom: 10px;
+}

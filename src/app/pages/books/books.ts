@@ -25,7 +25,7 @@ export class Books {
   jerror = computed(() => JSON.stringify(this.error(), null, 2));
   descriptions = computed(() => {
     const val = this.book()?.description;
-    typeof val === 'string' ? val : val?.value
+    return typeof val === 'string' ? val : val?.value
   })
 
 
