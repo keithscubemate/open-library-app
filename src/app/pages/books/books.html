@@ -1,1 +1,24 @@
-<p>books {{book_id}} works!</p>
+@if (loading()) {
+<p>Loading...</p>
+} @else if (error()) {
+<pre>{{jerror()}}</pre>
+} @else if (book(); as b) {
+<div>
+  <img class="card-cover" [src]="'https://covers.openlibrary.org/b/id/' + b.covers[0] + '-M.jpg'" [alt]="b.title" />
+  <p>Title: {{ b.title }}</p>
+  <p>Authors:
+    <a [routerLink]="authorUrl()">
+      {{ author()?.name }}
+    </a>
+  </p>
+  <p>Description: {{ b.description }}</p>
+  <div>
+    Subjects:
+    @for (subject of b.subjects.slice(0, 10); track subject) {
+    {{ subject }},
+    }
+  </div>
+</div>
+} @else {
+<p> Nothing :/ </p>
+}

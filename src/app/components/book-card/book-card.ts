@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { Doc } from '../../models/openlibrary';
 import { RouterLink } from '@angular/router';
 
@@ -10,4 +10,5 @@ import { RouterLink } from '@angular/router';
 })
 export class BookCard {
   book = input.required<Doc>();
+  bookUrl = computed(() => `/books/${this.book().key.replace("/works/", "")}`)
 }

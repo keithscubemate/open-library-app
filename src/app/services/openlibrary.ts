@@ -37,7 +37,7 @@ export class OpenLibrary {
   }
 
   getBook(id: string): Observable<Book> {
-    return this.http.get<Book>(`${BASE_URL}/books/${id}.json`)
+    return this.http.get<Book>(`${BASE_URL}/works/${id}.json`)
   }
 
   getAuthor(id: string): Observable<Author> {

@@ -1,4 +1,4 @@
-<a class="card" [routerLink]="['books', book().cover_edition_key]">
+<a class="card" [routerLink]="bookUrl()">
   @if (book().cover_i) {
   <img class="card-cover" [src]="'https://covers.openlibrary.org/b/id/' + book().cover_i + '-M.jpg'"
     [alt]="book().title" />
