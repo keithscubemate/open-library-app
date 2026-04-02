@@ -22,8 +22,12 @@ export class Books {
   author = signal<Author | null>(null);
 
   authorUrl = computed(() => this.author()?.key)
-
   jerror = computed(() => JSON.stringify(this.error(), null, 2));
+  descriptions = computed(() => {
+    const val = this.book()?.description;
+    typeof val === 'string' ? val : val?.value
+  })
+
 
   book_id = "";
 
@@ -42,15 +46,15 @@ export class Books {
 
     this.openlibrary.getBook(book_id)
       .pipe(
-        finalize(() => this.loading.set(false)),
-        takeUntilDestroyed(this.destroyRef),
         switchMap((book) => {
           const author_id = book.authors[0].author.key.replace("/authors/", "");
 
           return this.openlibrary.getAuthor(author_id).pipe(
             map((author) => ({ author, book }))
           )
-        })
+        }),
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.loading.set(false)),
       )
       .subscribe({
         next: (res) => {

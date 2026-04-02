@@ -34,7 +34,7 @@ export interface Book {
   type: {
     key: string
   },
-  description: string,
+  description: string | { type: string, value: string },
   covers: number[],
   subject_places: string[],
   subjects: string[],
