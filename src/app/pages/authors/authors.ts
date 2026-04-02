@@ -23,6 +23,11 @@ export class Authors {
   works = signal<Book[] | null>(null)
 
   jerror = computed(() => JSON.stringify(this.error(), null, 2));
+  bio = computed(() => {
+    const bio = this.author()?.bio;
+    if (!bio) return null;
+    return typeof bio === 'string' ? bio : bio.value;
+  });
 
   author_id = "";
 

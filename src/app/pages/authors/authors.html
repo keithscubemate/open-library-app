@@ -1,33 +1,40 @@
 @if (loading()) {
-<p class="status-message">Loading…</p>
+<p class="status-message">Loading...</p>
 } @else if (error()) {
 <pre class="error-message">{{ jerror() }}</pre>
 } @else if (author(); as a) {
-<div>
-  <div>
-    <h1>{{ a.name }} </h1>
+<div class="author-detail">
+
+  <div class="author-header">
+    @if (a.photos[0]) {
+    <img class="author-photo" [src]="'https://covers.openlibrary.org/a/id/' + a.photos[0] + '-M.jpg'" [alt]="a.name" />
+    }
+    <div class="author-meta">
+      <h1 class="author-name">{{ a.name }}</h1>
+      @if (a.birth_date) {
+      <p class="author-dates">
+        {{ a.birth_date }}{{ a.death_date ? ' - ' + a.death_date : '' }}
+      </p>
+      }
+    </div>
   </div>
 
-  <p> {{ a.bio.value }} </p>
+  @if (bio()) {
+  <p class="author-bio">{{ bio() }}</p>
+  }
 
-
-  <img class="book-cover" [src]="'https://covers.openlibrary.org/a/id/' + a.photos[0] + '-M.jpg'" [alt]="a.name" />
-
-  <h2> Other Works: </h2>
-  @if (works(); as ws) {
-  <div>
-    <ul>
-      @for (w of ws; track w.key) {
-      <li>
-        <app-work-card [book]="w"></app-work-card>
-      </li>
+  @if (works()?.length) {
+  <section class="author-works">
+    <h2 class="works-heading">Works</h2>
+    <ul class="works-grid">
+      @for (w of works(); track w.key) {
+      <li><app-work-card [book]="w" /></li>
       }
     </ul>
-  </div>
-  } @else {
-  <p> No works :( </p>
+  </section>
   }
+
 </div>
 } @else {
-<p>Nothing found :/</p>
+<p class="status-message">Nothing found :/</p>
 }

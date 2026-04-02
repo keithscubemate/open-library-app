@@ -1,5 +1,15 @@
 <a class="card" [routerLink]="bookUrl()">
+  @if (book().covers?.[0]) {
+    <img class="card-cover"
+         [src]="'https://covers.openlibrary.org/b/id/' + book().covers[0] + '-M.jpg'"
+         [alt]="book().title" />
+  } @else {
+    <div class="card-cover-placeholder">book</div>
+  }
   <div class="card-body">
     <span class="card-title">{{ book().title }}</span>
+    @if (book().subjects?.[0]) {
+      <span class="card-subject">{{ book().subjects[0] }}</span>
+    }
   </div>
 </a>

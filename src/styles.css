@@ -1,7 +1,7 @@
 /* ─── Theme ─────────────────────────────────────────────────────────────────── */
 
 :root {
-  --color-bg:          #f5f0e8;
+  --color-bg:          #e8e0d0;
   --color-surface:     #fffdf7;
   --color-border:      #d6c9b0;
   --color-text:        #2e2a22;
@@ -87,6 +87,9 @@ input:focus {
 app-root {
   display: block;
   max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 2rem 1.5rem;
+  margin: 2rem auto;
+  padding: 2rem 2.5rem;
+  background: var(--color-surface);
+  border-radius: 10px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.08);
 }
