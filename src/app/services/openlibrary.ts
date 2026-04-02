@@ -10,37 +10,31 @@ const BASE_URL = "https://openlibrary.org"
 })
 export class OpenLibrary {
   private http = inject(HttpClient);
-  private cache = new Map<string, SearchResponse>();
+  private searchCache = new Map<string, SearchResponse>();
+  private bookCache = new Map<string, Book>();
+  private authorCache = new Map<string, Author>();
 
   search(query: string, page: number): Observable<SearchResponse> {
     const key = `${query}:${page}`;
+    if (this.searchCache.has(key)) return of(this.searchCache.get(key)!);
 
-    if (this.cache.has(key)) {
-      return of(this.cache.get(key)!);
-    }
-
-    const resp = this.http.get<SearchResponse>(
-      `${BASE_URL}/search.json`,
-      {
-        params: {
-          q: query,
-          page: page,
-          limit: 12,
-        },
-      }
-    ).pipe(
-      tap((res) => this.cache.set(key, res))
-    )
-
-
-    return resp
+    return this.http.get<SearchResponse>(`${BASE_URL}/search.json`, {
+      params: { q: query, page: page, limit: 12 },
+    }).pipe(tap(res => this.searchCache.set(key, res)));
   }
 
   getBook(id: string): Observable<Book> {
+    if (this.bookCache.has(id)) return of(this.bookCache.get(id)!);
+
     return this.http.get<Book>(`${BASE_URL}/works/${id}.json`)
+      .pipe(tap(res => this.bookCache.set(id, res)));
   }
 
   getAuthor(id: string): Observable<Author> {
+    if (this.authorCache.has(id)) return of(this.authorCache.get(id)!);
+
     return this.http.get<Author>(`${BASE_URL}/authors/${id}.json`)
+      .pipe(tap(res => this.authorCache.set(id, res)));
   }
 }
+
