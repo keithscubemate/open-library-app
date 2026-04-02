@@ -8,6 +8,7 @@ export interface Doc {
   cover_i: number,
   has_fulltext: boolean,
   edition_count: number,
+  cover_edition_key: string,
   title: string,
   author_name: string[],
   first_publish_year: number,

@@ -1,35 +1,82 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal, effect, computed } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { OpenLibrary } from '../../services/openlibrary';
+import { finalize } from 'rxjs';
+import { SearchResponse } from '../../models/openlibrary';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { BookCard } from '../../components/book-card/book-card';
 
 @Component({
   selector: 'app-search',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, BookCard],
   templateUrl: './search.html',
   styleUrl: './search.css',
 })
 export class Search {
   private router = inject(Router);
   private openlibrary = inject(OpenLibrary);
+  private route = inject(ActivatedRoute);
+
+  params = toSignal(this.route.queryParams)
+
+  search = computed(() => this.params()?.['q'])
+  page = computed(() => this.params()?.['page'])
+
+  books = signal<SearchResponse | null>(null)
+  loading = signal(false)
+  error = signal(null)
+  jerror = computed(() => JSON.stringify(this.error(), null, 2))
+
+  constructor() {
+    effect(() => {
+      if (!this.search()) {
+        this.books.set(null)
+        return
+      }
+
+      this.runSearch(this.search(), this.page())
+    })
+  }
 
   form = new FormGroup({
-    boa: new FormControl('book'),
     control: new FormControl('', Validators.required)
   });
 
-  books = toSignal(
-    this.openlibrary.search("dune", 1),
-    { initialValue: null }
-  );
+  runSearch(query: string, page: number) {
+    if (query == "") {
+      return;
+    }
+
+    this.error.set(null)
+    this.loading.set(true)
+
+    this.openlibrary.search(query, page)
+      .pipe(finalize(() => this.loading.set(false)))
+      .subscribe({
+        next: (res) => this.books.set(res),
+        error: (err) => this.error.set(err),
+      })
+  }
+
+  updatePage(amount: number) {
+    const page = Number(this.page())
+
+    const new_page = (page > 1) ? page + amount : 1
+
+    this.router.navigate(
+      ['/'],
+      {
+        queryParams: {
+          q: this.search(),
+          page: new_page,
+        }
+      }
+    );
+  }
 
   onSubmit() {
-    const boa = this.form.value.boa
     const query = this.form.value.control
-
-    const root = boa == "book" ? '/books' : '/authors';
-
-    this.router.navigate([root, query]);
+    this.router.navigate(['/'], { queryParams: { q: query, page: 1 } });
   }
 }

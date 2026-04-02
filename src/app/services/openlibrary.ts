@@ -12,7 +12,7 @@ export class OpenLibrary {
   private http = inject(HttpClient);
 
   search(query: string, page: number): Observable<SearchResponse> {
-    return this.http.get<SearchResponse>(
+    const resp = this.http.get<SearchResponse>(
       `${BASE_URL}/search.json`,
       {
         params: {
@@ -22,10 +22,11 @@ export class OpenLibrary {
         },
       }
     )
+    return resp
   }
 
   getBook(id: string): Observable<Book> {
-    return this.http.get<Book>(`${BASE_URL}/works/${id}.json`)
+    return this.http.get<Book>(`${BASE_URL}/books/${id}.json`)
   }
 
   getAuthor(id: string): Observable<Author> {

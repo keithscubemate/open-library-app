@@ -1,1 +1,7 @@
-<p>book-card works!</p>
+<div class="container">
+  <a [routerLink]="['books', book().cover_edition_key]">
+    <label>{{ book().title }} |</label>
+    <span></span>
+  </a>
+  <label>| {{ book().author_name }}</label>
+</div>
